@@ -31,3 +31,5 @@ For a working example, see [this demo](https://www.frisovandijk.com/public/git/i
 
 ## What can't I do?
 As far as I know, the only limitation is nesting infocards. Other than that, all HTML code should be accepted.
+
+Oh, and it doesn't work on Internet Explorer.
