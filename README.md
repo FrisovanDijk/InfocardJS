@@ -20,9 +20,11 @@ There are several variables to customise:
 
 ## Example
 The infocard collapsed:
+
 <img src="https://www.frisovandijk.com/public/git/infocardjs/infocard_collapse.PNG" alt="Collapsed infocard" />
 
 The infocard expanded:
+
 <img src="https://www.frisovandijk.com/public/git/infocardjs/infocard_expand.PNG" alt="Expanded infocard" />
 
 For a working example, see [this demo](https://www.frisovandijk.com/public/git/infocardjs/demo.html).
