@@ -5,12 +5,12 @@ window.onload = function icard_createInfocards() {
     // Customisable variables
 
     // Regular expression to find the correct code. Several structures:
-    // {text}[text]  = /\{(.*?)\}\[(.*?)\]/g
-    // {!text}[text] = /\{\!(.*?)\}\[(.*?)\]/g
-    // [text](text)  = /\[(.*?)\]\((.*?)\)/g
-    // [!text](text) = /\[\!(.*?)\]\((.*?)\)/g
-    // {!text}[!text] = /\{\!(.*?)\}\[(.*?)\]/g -- This is advised if your site uses markdown
-    var regex = /\{\!(.*?)\}\[(.*?)\]/g;
+    // {text}[text]  = /\{(.*?)\}\[([\s\S]*?)\]/g
+    // {!text}[text] = /\{\!(.*?)\}\[([\s\S]*?)\]/g
+    // [text](text)  = /\[(.*?)\]\(([\s\S]*?)\)/g
+    // [!text](text) = /\[\!(.*?)\]\(([\s\S]*?)\)/g
+    // {!text}[!text] = /\{\!(.*?)\}\[([\s\S]*?)\]/g -- This is advised if your site uses markdown
+    var regex = /\{\!(.*?)\}\[([\s\S]*?)\]/g;
 
     // Colours and size for the arrow button
     var arrow_style = {'size':16, 'background':'#DCDCDA', 'foreground':'dodgerblue'};
@@ -26,15 +26,15 @@ window.onload = function icard_createInfocards() {
     var icard_counter = 0;
 
     for(var i = 0; i < icard_elems.length; i++) {
-        console.log(icard_elems[i]);
         for (var p = 0; p < icard_elems[i].length; p++) {
-            var divtext = icard_elems[i][p].innerHTML;                     // Extract inner html from the div
+            var divtext = icard_elems[i][p].innerHTML;                  // Extract inner html from the div
             var icards_raw = divtext.match(regex);                      // Get raw infocard with regex
             var icards_text = icard_extractString(icards_raw);          // Extract all strings to array
 
             for(var j = 0; j < icards_text.length; j++) {
                 var icard_html = icard_createHTML(icards_text[j], icard_counter, arrow_style);      // Generate HTML for infocards
                 icard_counter++;
+                //console.log(icard_html);
                 divtext = divtext.replace(icards_raw[j], icard_html);   // Replace infocard text with HTML
             }
             icard_elems[i][p].innerHTML = divtext;                         // Replace text in div
@@ -48,12 +48,13 @@ window.onload = function icard_createInfocards() {
 function icard_extractString(rawArray) {
     // Check for the following non-greedy pattern: {!text}[text]
     var textarray = [];
-
-    for (var i = 0; i < rawArray.length; i++) {
-        var str = rawArray[i];
-        var infotext = str.substring(2, str.indexOf('}'));
-        var cardtext = str.substring(str.indexOf('[')+1, str.length - 1);
-        textarray.push({'infotext':infotext, 'cardtext':cardtext});
+    if (rawArray != null) {
+        for (var i = 0; i < rawArray.length; i++) {
+            var str = rawArray[i];
+            var infotext = str.substring(2, str.indexOf('}'));
+            var cardtext = str.substring(str.indexOf('[')+1, str.length - 1);
+            textarray.push({'infotext':infotext, 'cardtext':cardtext});
+        }
     }
     return textarray;
 }
@@ -67,6 +68,9 @@ function icard_createHTML(cardstring, icard_counter, arrow_style) {
         'height="' + arrow_style['size'] + '" id="' + icard_id + '_arrow" style="margin-bottom: -2px;">' +
         '<circle style="fill:' + arrow_style['background'] + ';" cx="8" cy="8" r="8"/>' +
         '<polygon style="fill:' + arrow_style['foreground'] + ';" points="8 12.1 8 12.1 4 5.1 12 5.1 "/></svg>';
+
+    cardstring['cardtext'] = cardstring['cardtext'].replace(/\<.?p\>/g, "<br/>");
+    console.log(cardstring['cardtext']);
     return "<span class='icard'>"
         + "<span class='icard_toggle' onclick='icard_click(`" + icard_id + "`)'>" + cardstring['infotext'] + " " + toggle_arrow + "</span>"
         + "<span class='icard_content' id='" + icard_id + "'>" + cardstring['cardtext'] + "</span></span>";

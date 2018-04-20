@@ -1,13 +1,18 @@
 <HTML>
 <head>
     <meta charset="UTF-8">
-    <title>Infocard Test</title>
+    <title>InfocardJS</title>
     <script>window.onload = function icard_createInfocards() { var regex = /\{\!(.*?)\}\[(.*?)\]/g; var arrow_style = {'size':16, 'background':'#DCDCDA', 'foreground':'dodgerblue'}; var divnames = ["post_text"]; var icard_elems = []; for(var k = 0; k < divnames.length; k++) { icard_elems.push(document.getElementsByClassName(divnames[k])); } var icard_counter = 0; for(var i = 0; i < icard_elems.length; i++) { console.log(icard_elems[i]); for (var p = 0; p < icard_elems[i].length; p++) { var divtext = icard_elems[i][p].innerHTML; var icards_raw = divtext.match(regex); var icards_text = icard_extractString(icards_raw); for(var j = 0; j < icards_text.length; j++) { var icard_html = icard_createHTML(icards_text[j], icard_counter, arrow_style); icard_counter++; divtext = divtext.replace(icards_raw[j], icard_html); } icard_elems[i][p].innerHTML = divtext; } } }; function icard_extractString(rawArray) { var textarray = []; for (var i = 0; i < rawArray.length; i++) { var str = rawArray[i]; var infotext = str.substring(2, str.indexOf('}')); var cardtext = str.substring(str.indexOf('[')+1, str.length - 1); textarray.push({'infotext':infotext, 'cardtext':cardtext}); } return textarray; } function icard_createHTML(cardstring, icard_counter, arrow_style) { var icard_id = "icard_" + icard_counter; var toggle_arrow = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="' + arrow_style['size'] + '" ' + 'height="' + arrow_style['size'] + '" id="' + icard_id + '_arrow" style="margin-bottom: -2px;">' + '<circle style="fill:' + arrow_style['background'] + ';" cx="8" cy="8" r="8"/>' + '<polygon style="fill:' + arrow_style['foreground'] + ';" points="8 12.1 8 12.1 4 5.1 12 5.1 "/></svg>'; return "<span class='icard'>" + "<span class='icard_toggle' onclick='icard_click(`" + icard_id + "`)'>" + cardstring['infotext'] + " " + toggle_arrow + "</span>" + "<span class='icard_content' id='" + icard_id + "'>" + cardstring['cardtext'] + "</span></span>"; } function icard_click(icard_id) { var icard = document.getElementById(icard_id); var arrow = document.getElementById(icard_id + "_arrow"); if(icard.style.display == "block") { icard.style.display = "none"; arrow.style.webkitTransform = 'rotate(0deg)'; } else { icard.style.display = "block"; arrow.style.webkitTransform = 'rotate(180deg)'; } }</script>
 
     <style>
         *{
             font-size: 17px;
         }
+
+        h1 {
+            font-size: 28px;
+        }
+
         .post_text {
             width: 800px;
         }
@@ -28,18 +33,30 @@
             padding: 12px 16px;
             color: black;
         }
+
+        pre code {
+            background-color: #eee;
+            border: 1px solid #999;
+            display: block;
+            padding: 20px;
+        }
     </style>
 </head>
+<h1>InfocardJS</h1>
 <div class="post_text">
-    Lorem ipsum dolor sit {!amet}[consectetur adipiscing <a href="#">elit</a>]. Phasellus id nisi fermentum, cursus turpis et, consectetur purus. Nullam tempor enim erat, sit amet dignissim nibh consectetur id.
+    Lorem ipsum dolor sit {!amet}[consectetur adipiscing <a href="#">elit</a><p><strong>With</strong> different html tags <div>This is a div</div></p>]. Phasellus id nisi fermentum, cursus turpis et, consectetur purus. Nullam tempor enim erat, sit amet dignissim nibh consectetur id.
 </div>
 
 <div class="raw_text">
     <p><strong>Raw</strong></p>
-    Lorem ipsum dolor sit {!amet}[consectetur adipiscing <a href="#">elit</a>].
+    <pre><code>Lorem ipsum dolor sit {!amet}[ consectetur adipiscing
+        &lt;a href=&quot;#&quot;&gt;elit&lt;/a&gt;
+        &lt;p&gt;&lt;strong&gt;With&lt;/strong&gt; different html tags
+        &lt;div&gt;This is a div&lt;/div&gt;&lt;/p&gt;
+        ]. Phasellus id nisi fermentum, cursus turpis et, consectetur purus. Nullam tempor enim erat, sit amet dignissim nibh consectetur id.</code></pre>
 </div>
 
 <div class="post_text">
-    This is a demo for InfocardJS by <a href="https://www.frisovandik.com">Friso van Dijk</a>. See the Github repository for more info.
+    <p>This is a demo for InfocardJS by <a href="https://www.frisovandik.com">Friso van Dijk</a>. See the <a href="https://github.com/FrisovanDijk/InfocardJS">Github repository</a> for more info.
 </div>
 </HTML>
