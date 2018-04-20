@@ -29,7 +29,7 @@ Just use infocard.min.js or infocard.js in your project and you're ready to go.
 There are three classes:
 * `icard`: for the entire infocard
 * `icard_toggle`: the text that's always visible (includes the nested arrow)
-* `icard_content`: the expandable content. It turns into a display:block by defeault.
+* `icard_content`: the expandable content. It turns into a `display:block` by default.
 
 ## Customising
 There are several variables to customise at the top of the document:
